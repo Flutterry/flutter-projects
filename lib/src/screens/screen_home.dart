@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
         title: Text('master branch'),
       ),
       body: Center(
-        child: Text('this is a master branch please checkout to other branch'),
+        child: Text('this is a netflix branch please checkout to other branch'),
       ),
     );
   }
