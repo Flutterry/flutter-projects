@@ -10,10 +10,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('master branch'),
+        title: Text('2048 branch'),
       ),
       body: Center(
-        child: Text('this is a master branch please checkout to other branch'),
+        child: Text('this is a 2048 branch please checkout to other branch'),
       ),
     );
   }
