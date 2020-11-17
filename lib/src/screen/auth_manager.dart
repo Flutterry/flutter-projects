@@ -25,11 +25,9 @@ class _SignInState extends State<SignIn> {
       passwordNode = FocusNode(),
       rePasswordNode = FocusNode();
 
-  final formState = GlobalKey<FormState>();
+  final auth = AuthPresenter(), store = StorePresenter(), storage = StoragePresenter();
 
-  final auth = AuthPresenter(),
-      storage = StoragePresenter(),
-      store = StorePresenter();
+  final formState = GlobalKey<FormState>();
 
   void signIn() async {
     var valid = formState.currentState.validate();
@@ -42,7 +40,7 @@ class _SignInState extends State<SignIn> {
       Nav.pushClear(context, Home());
     else {
       switchLoading(false);
-      showMsg(context, 'error please try again later ', error);
+      showMsg(context, 'please try again later ', error);
     }
   }
 

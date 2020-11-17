@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../presenter/auth_presenter.dart';
 import '../utils/utils.dart';
 import '../widget/widgets.dart';
-import './screens.dart';
+import 'screens.dart';
 
 class GetStarted extends StatefulWidget {
   @override
@@ -17,9 +18,9 @@ class _GetStartedState extends State<GetStarted> {
       await Future.delayed(Duration(seconds: 2));
       var auth = AuthPresenter();
       if(auth.checkUser()){
-        Nav.pushClear(context, Home());
+       Nav.pushClear(context, Home());
       }else{
-        Nav.pushReplace(context, SignIn());
+       Nav.pushReplace(context, SignIn());
       }
     });
   }
@@ -50,7 +51,7 @@ class _GetStartedState extends State<GetStarted> {
                 type: Type.centerRight),
             TextShadow(
               text: 'Phoenix Chat',
-              fontSize: 50,
+              fontSize: 45,
             )
           ],
         ),

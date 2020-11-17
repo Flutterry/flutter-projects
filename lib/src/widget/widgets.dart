@@ -7,3 +7,8 @@ export 'scrollable_column.dart';
 export 'rounded_button_with_shadow.dart';
 export 'clickable_column_text.dart';
 export 'loading.dart';
+export 'user_logo.dart';
+export 'chat_viewer.dart';
+export 'sending_manager.dart';
+export 'online_users.dart';
+export 'chat_rooms.dart';

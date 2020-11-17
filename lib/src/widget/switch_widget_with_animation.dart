@@ -14,7 +14,7 @@ class SwitchedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       child: isFirst ? child1 : child2,
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 500),
       transitionBuilder: (child, animation) {
         return ScaleTransition(child: child, scale: animation);
       },
