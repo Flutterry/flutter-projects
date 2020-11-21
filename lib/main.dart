@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/src/screens/screen_home.dart';
+import 'package:flutter_projects/src/screens/game_screen/game_screen.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Home(),
+      debugShowCheckedModeBanner: false,
+      home: GameScreen(),
     );
   }
 }
