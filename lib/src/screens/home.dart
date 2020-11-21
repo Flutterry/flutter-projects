@@ -26,8 +26,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
 
     parent.addListener(() {
-      if(parent.status == AnimationStatus.completed)
-        flatGrid.forEach((element) {element.resetAnimation();});
+      if (parent.status == AnimationStatus.completed)
+        flatGrid.forEach((element) {
+          element.resetAnimation();
+        });
     });
     grid[1][2].value = 2;
     super.initState();
@@ -46,14 +48,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     stackItems.addAll(
       flatGrid.map(
         (e) => Positioned(
-          left: e.animationX.value * tileSize,
-          top: e.animationY.value * tileSize,
+          left: e.x * tileSize,
+          top: e.y * tileSize,
           width: tileSize,
           height: tileSize,
           child: Center(
             child: Container(
-              width: tileSize - marginBetweenTile * 2,
-              height: tileSize - marginBetweenTile * 2,
+              width: tileSize - marginBetweenTile * 2 * e.appear.value,
+              height: tileSize - marginBetweenTile * 2 * e.appear.value,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(cornerRadius),
                 color: lightBrown,
@@ -73,13 +75,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ? SizedBox.shrink()
               : Positioned(
                   left: e.x * tileSize,
-                  top: e.y * tileSize,
-                  width: tileSize ,
+                  top: e.y* tileSize,
+                  width: tileSize,
                   height: tileSize,
                   child: Center(
                     child: Container(
-                      width: tileSize - marginBetweenTile * 2,
-                      height: tileSize - marginBetweenTile * 2,
+                      alignment: Alignment.center,
+                      width:( tileSize - marginBetweenTile * 2 )* e.appear.value,
+                      height:( tileSize - marginBetweenTile * 2) * e.appear.value,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(cornerRadius),
                         color: numTileColor[e.value],
@@ -156,6 +159,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     var emptyTiles = flatGrid.where((element) => element.value == 0).toList();
     emptyTiles.shuffle();
     emptyTiles.first.value = 2;
+    emptyTiles.first.startAppear(parent);
   }
 
   void merge(List<Tile> tiles) {
@@ -171,14 +175,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
       if (first != tiles[i] || second != null) {
         var result = first.value;
-        first.startMovingTo(parent, tiles[i].x, tiles[i].y);
         first.value = 0;
         if (second != null) {
           result += second.value;
           tiles[i].startChangeFontSize(parent);
           second.value = 0;
         }
-
         tiles[i].value = result;
       }
     }

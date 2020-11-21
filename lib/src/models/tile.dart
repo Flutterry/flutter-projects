@@ -10,17 +10,14 @@ class Tile {
   }
 
   void resetAnimation(){
-    animationX = AlwaysStoppedAnimation(x);
-    animationY = AlwaysStoppedAnimation(y);
     fontSize = AlwaysStoppedAnimation(1);
+    appear = AlwaysStoppedAnimation(1.0);
   }
 
-  Animation<double> animationX;
-  Animation<double> animationY;
+  Animation<double> appear;
 
-  void startMovingTo(AnimationController parent, double x, double y) {
-    animationX = Tween(begin: this.x, end: x).animate(parent);
-    animationY = Tween(begin: this.y, end: y).animate(parent);
+  void startAppear(AnimationController parent){
+    appear = Tween(begin: 0.0, end: 1.0).animate(parent);
   }
 
   Animation<double> fontSize;
