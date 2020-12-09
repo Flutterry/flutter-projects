@@ -16,49 +16,76 @@ double appBarHeight(BuildContext context) =>
 double pobFoodHeight(BuildContext context) =>
     MediaQuery.of(context).size.height * 0.4;
 
-double bestFoodHeight(BuildContext context) =>
+double bestRestaurantHeight(BuildContext context) =>
     MediaQuery.of(context).size.height * 0.4;
 
 double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
+
+double height(BuildContext context, double persentage) =>
+    MediaQuery.of(context).size.height * persentage;
+
+void nav(BuildContext context, Widget widget) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
+}
+
+void navReplacement(BuildContext context, Widget widget) {
+  Navigator.pushReplacement(
+      context, MaterialPageRoute(builder: (context) => widget));
+}
+
+void navClear(BuildContext context, Widget widget) {
+  Navigator.pushAndRemoveUntil(context,
+      MaterialPageRoute(builder: (context) => widget), (route) => false);
+}
+
+void pop(BuildContext context) {
+  Navigator.pop(context);
+}
+
+bool valid(String regex, String value) {
+  var result = RegExp(regex).hasMatch(value);
+  return result;
+}
+
+void showSnakbar(GlobalKey<ScaffoldState> key, String msg) {
+  // ignore: deprecated_member_use
+  key.currentState.showSnackBar(
+    SnackBar(content: Text(msg)),
+  );
+}
 
 ///default ext = png
 String image(String imageName, [String ext = 'png']) =>
     'assets/images/$imageName.$ext';
 
-var categories = <Category>[
-  Category(name: 'salad', image: image('salad')),
-  Category(name: 'steak', image: image('steak')),
-  Category(name: 'fast food', image: image('sandwich')),
-  Category(name: 'desert', image: image('ice-cream')),
-  Category(name: 'sea food', image: image('fish')),
-  Category(name: 'drink', image: image('pint')),
-];
+String emailRegx = '^[1-9a-zA-Z_]{3,}@[a-zA-Z]{2,}\\.com\$';
+String passwordRegx = '[a-zA-Z1-9_]{8,}';
 
 var pobFood = <Food>[
   Food(
-    name: 'some food',
-    image: image('1', 'jpg'),
-    price: 12.99,
-    rate: 4.7,
-    fav: false,
-    peopleRating: 200,
-  ),
+      name: 'some food',
+      image: image('1', 'jpg'),
+      price: 12.99,
+      rate: 4.7,
+      fav: false,
+      peopleRating: 200,
+      restaurentId: 'Pizza hut'),
   Food(
-    name: 'some food',
-    image: image('3', 'jpg'),
-    price: 12.99,
-    rate: 4,
-    fav: false,
-    peopleRating: 200,
-  ),
+      name: 'some food',
+      image: image('3', 'jpg'),
+      price: 12.99,
+      rate: 4,
+      fav: false,
+      peopleRating: 200,
+      restaurentId: 'Pizza hut'),
   Food(
-    name: 'some food',
-    image: image('5', 'jpg'),
-    price: 12.99,
-    rate: 4.7,
-    fav: true,
-    peopleRating: 200,
-  ),
+      name: 'some food',
+      image: image('5', 'jpg'),
+      price: 12.99,
+      rate: 4.7,
+      fav: true,
+      peopleRating: 200,
+      restaurentId: 'Pizza hut'),
 ];
 
 Map<IconData, String> bottomItems = {
@@ -76,7 +103,7 @@ var bestFoodList = <Food>[
       rate: 4.7,
       fav: true,
       peopleRating: 200,
-      from: 'Pizza hut'),
+      restaurentId: 'Pizza hut'),
   Food(
       name: 'some food',
       image: image('sf', 'jpg'),
@@ -84,7 +111,7 @@ var bestFoodList = <Food>[
       rate: 4.7,
       fav: false,
       peopleRating: 200,
-      from: 'Pizza hut'),
+      restaurentId: 'Pizza hut'),
   Food(
       name: 'some food',
       image: image('pizza', 'jpg'),
@@ -92,5 +119,5 @@ var bestFoodList = <Food>[
       rate: 4.7,
       fav: true,
       peopleRating: 200,
-      from: 'Pizza hut'),
+      restaurentId: 'Pizza hut'),
 ];

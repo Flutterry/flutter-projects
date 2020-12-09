@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_projects/src/screen/details.dart';
+import 'package:flutter_projects/src/screen/open_restaurant.dart';
+import 'package:flutter_projects/src/service/category_services.dart';
+import 'package:flutter_projects/src/service/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../utils.dart';
 import '../widget/widgets.dart';
 import '../model/models.dart';
@@ -14,6 +20,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: white,
+      drawer: MyDrawer(),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -27,161 +34,98 @@ class _HomeState extends State<Home> {
             SliverToBoxAdapter(
               child: pobularFood(),
             ),
-            bestFood(),
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 15),
+                  CustomTitle(
+                    text: ' Best Restaurants',
+                    size: 20,
+                    color: grey,
+                  ),
+                  SizedBox(height: 5),
+                ],
+              ),
+            ),
+            bestRestaurants(),
           ],
         ),
       ),
     );
   }
 
-  Widget bestFood() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          var food = bestFoodList[index];
-          return bestFoodCard(food, () {
-            //TODO implement later
-          });
-        },
-        childCount: bestFoodList.length,
-      ),
-    );
-  }
+  Widget bestRestaurants() {
+    return FutureBuilder(
+        future: RestaurantServices.instance().getBestRestaurant(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData)
+            return SliverToBoxAdapter(child: SpinKitThreeBounce(color: red));
+          else {
+            var bestRestaurants = <Restaurant>[];
+            for (var doc in snapshot.data.docs) {
+              bestRestaurants.add(Restaurant.fromSnapshot(doc));
+            }
 
-  Widget bestFoodCard(Food food, void Function() onPress) {
-    return Stack(
-      children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
-          height: bestFoodHeight(context),
-          width: double.infinity,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              food.image,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
-          height: bestFoodHeight(context),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.transparent,
-                Colors.black87,
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          left: 20,
-          top: 10,
-          child: IconCard(
-            icon: food.fav ? Icons.favorite : Icons.favorite_border,
-            iconColor: red,
-            onTap: () {
-              //TODO later
-            },
-          ),
-        ),
-        Positioned(
-          top: 10,
-          right: 20,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-            decoration: BoxDecoration(
-              color: white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.star, color: Colors.yellow[700]),
-                SizedBox(width: 5),
-                CustomTitle(
-                  text: '${food.rate}',
-                  size: 14,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 10,
-          left: 20,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTitle(
-                text: food.name,
-                color: white,
-                weight: FontWeight.w500,
-                size: 25,
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  var restaurant = bestRestaurants[index];
+                  return BestRestaurantCard(
+                      restaurant: restaurant,
+                      onPress: () => nav(
+                            context,
+                            OpenRestaurant(restaurant: restaurant),
+                          ));
+                },
+                childCount: bestRestaurants.length,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomTitle(text: 'by : ', color: white, size: 14),
-                  CustomTitle(
-                    text: food.from,
-                    color: white,
-                    size: 18,
-                    weight: FontWeight.w400,
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          right: 20,
-          bottom: 10,
-          child: CustomTitle(
-            text: '\$${food.price.toStringAsFixed(2)}',
-            size: 20,
-            weight: FontWeight.bold,
-            color: white,
-          ),
-        )
-      ],
-    );
+            );
+          }
+        });
   }
 
   Widget pobularFood() {
-    return Container(
-      height: pobFoodHeight(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 5),
-          CustomTitle(
-            text: ' Pobular Food',
-            color: grey,
-            size: 20,
-          ),
-          SizedBox(height: 5),
-          Expanded(
-            child: ListView.builder(
-              itemCount: pobFood.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                var food = pobFood[index];
-                return PobFoodCard(
-                    context: context,
-                    food: food,
-                    onPress: () {
-                      //TODO onFood card click
-                    });
-              },
+    return FutureBuilder(
+        future: FoodServices.instance().getFood(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) return SpinKitDualRing(color: red);
+
+          var foods = <Food>[];
+          for (var doc in snapshot.data.docs) {
+            foods.add(Food.fromSnapshot(doc));
+          }
+
+          return Container(
+            height: pobFoodHeight(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 5),
+                CustomTitle(
+                  text: ' Pobular Food',
+                  color: grey,
+                  size: 20,
+                ),
+                SizedBox(height: 5),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: foods.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      var food = foods[index];
+                      return PobFoodCard(
+                          food: food,
+                          onPress: () {
+                            nav(context, Details(food: food));
+                          });
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Widget mySliverAppBar() {
@@ -214,25 +158,43 @@ class _HomeState extends State<Home> {
             },
           ),
           SizedBox(height: 10),
-          Expanded(child: buildCategories(categories)),
+          Expanded(child: buildCategories()),
           SizedBox(height: 5),
         ],
       ),
     );
   }
 
-  Widget buildCategories(List<Category> categories) {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        var category = categories[index];
-        return CategoryCard(
-          category: category,
-          onPress: () {
-            //TODO impelementation of catogory click
-          },
-        );
+  Widget buildCategories() {
+    return FutureBuilder(
+      future: CategoryServices.instance().getCategories(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasData) {
+          var categories = <Category>[];
+          for (var doc in snapshot.data.docs) {
+            categories.add(Category.fromSnapshot(doc));
+          }
+          return ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              var category = categories[index];
+              return CategoryCard(
+                category: category,
+                onPress: () {
+                  //TODO impelementation of catogory click
+                },
+              );
+            },
+          );
+        } else {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SpinKitThreeBounce(color: red),
+            ],
+          );
+        }
       },
     );
   }

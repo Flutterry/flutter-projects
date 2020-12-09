@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: applicationTitle,
       theme: ThemeData(primarySwatch: red),
-      home: Navigation(),
+      home: Splash(),
     );
   }
 }

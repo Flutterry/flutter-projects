@@ -1,2 +1,7 @@
 export 'home.dart';
-export 'navigation.dart';
+export 'details.dart';
+export 'shopping.dart';
+export 'log_in.dart';
+export 'regester.dart';
+export 'open_restaurant.dart';
+export 'splash.dart';

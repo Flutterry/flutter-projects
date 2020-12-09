@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../model/models.dart';
 import '../utils.dart';
 import '../widget/widgets.dart';
@@ -34,7 +36,15 @@ class CategoryCard extends StatelessWidget {
                   )
                 ],
               ),
-              child: Image.asset(category.image),
+              child: CachedNetworkImage(
+                imageUrl: category.image,
+                placeholder: (context, text) {
+                  return SpinKitDoubleBounce(
+                    color: red,
+                    size: 30,
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(height: 3),
