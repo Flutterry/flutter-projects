@@ -79,8 +79,11 @@ class _DetailsState extends State<Details> {
             children: [
               CustomTitle(text: 'by: ', size: 13),
               GestureDetector(
-                onTap: () {
-                  //TODO open restaurant
+                onTap: () async {
+                  var res = Restaurant.fromSnapshot(
+                      await RestaurantServices.instance()
+                          .getRestaurantById(food.restaurentId));
+                  nav(context, OpenRestaurant(restaurant: res));
                 },
                 child: CustomTitle(
                   text: restaurant.name,

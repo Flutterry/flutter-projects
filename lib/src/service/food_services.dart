@@ -10,4 +10,7 @@ class FoodServices {
 
   Future<QuerySnapshot> getFood() =>
       _foodCollection.limit(10).orderBy('rate', descending: true).get();
+
+  Future<QuerySnapshot> getFoodByRestaurant(String id) =>
+      _foodCollection.where('restaurantId', isEqualTo: id).limit(10).get();
 }
